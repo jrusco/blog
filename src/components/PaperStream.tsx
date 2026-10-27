@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState, type RefObject } from "react";
 import { Link } from "react-router-dom";
 import { formatDate, streamLayout, type Article } from "../lib/articles";
+import { isTabReachable } from "../lib/visibility";
 
 const LANES = [
   { y: "12%", w: 232, rot: -7, z: 5 },
@@ -22,21 +23,13 @@ function useMedia(query: string) {
   return matches;
 }
 
-const MIN_VISIBLE = 0.6;
-
-function visibleFraction(rect: DOMRect) {
-  const w = Math.max(0, Math.min(rect.right, window.innerWidth) - Math.max(rect.left, 0));
-  const h = Math.max(0, Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0));
-  return (w * h) / (rect.width * rect.height);
-}
-
 function useTabOnlyVisibleSheets(streamRef: RefObject<HTMLElement | null>) {
   useEffect(() => {
     const sheets = () => streamRef.current?.querySelectorAll<HTMLElement>(".paper-sheet") ?? [];
     const onKeyDown = (event: KeyboardEvent) => {
       if (event.key !== "Tab") return;
       for (const sheet of sheets()) {
-        sheet.tabIndex = visibleFraction(sheet.getBoundingClientRect()) >= MIN_VISIBLE ? 0 : -1;
+        sheet.tabIndex = isTabReachable(sheet.getBoundingClientRect(), window.innerWidth, window.innerHeight) ? 0 : -1;
       }
     };
     // Shift+Tab from browser chrome sends no keydown, so leaving the page must close the filter.
