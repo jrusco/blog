@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 import { formatDate, streamTiming, type Article } from "../lib/articles";
 
@@ -20,6 +20,14 @@ function useMedia(query: string) {
     return () => media.removeEventListener("change", update);
   }, [query]);
   return matches;
+}
+
+const MIN_VISIBLE = 0.6;
+
+function visibleFraction(rect: DOMRect) {
+  const w = Math.max(0, Math.min(rect.right, window.innerWidth) - Math.max(rect.left, 0));
+  const h = Math.max(0, Math.min(rect.bottom, window.innerHeight) - Math.max(rect.top, 0));
+  return (w * h) / (rect.width * rect.height);
 }
 
 function SheetFace({ article }: { article: Article }) {
@@ -77,6 +85,19 @@ function FlyingSheet({
 export function PaperStream({ articles }: { articles: Article[] }) {
   const reduced = useMedia("(prefers-reduced-motion: reduce)");
   const narrow = useMedia("(max-width: 760px)");
+  const streamRef = useRef<HTMLDivElement>(null);
+
+  // Sheets move, so decide at Tab time (capture runs before focus navigation) which ones are in view.
+  useEffect(() => {
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Tab" || !streamRef.current) return;
+      for (const sheet of streamRef.current.querySelectorAll<HTMLElement>(".paper-sheet")) {
+        sheet.tabIndex = visibleFraction(sheet.getBoundingClientRect()) >= MIN_VISIBLE ? 0 : -1;
+      }
+    };
+    window.addEventListener("keydown", onKeyDown, { capture: true });
+    return () => window.removeEventListener("keydown", onKeyDown, { capture: true });
+  }, []);
 
   if (articles.length === 0) {
     return (
@@ -104,7 +125,7 @@ export function PaperStream({ articles }: { articles: Article[] }) {
   const { slots, duration, gap, scale } = streamTiming(articles.length, narrow);
 
   return (
-    <div className="paper-stream" aria-label="Journal">
+    <div ref={streamRef} className="paper-stream" aria-label="Journal">
       {Array.from({ length: slots }, (_, slot) => (
         <FlyingSheet
           key={slot}
