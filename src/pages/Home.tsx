@@ -43,6 +43,7 @@ export function Home() {
             ? "hero-copy is-gone relative z-10 flex flex-1 flex-col items-center justify-center px-6 py-[90px] text-center"
             : "hero-copy relative z-10 flex flex-1 flex-col items-center justify-center px-6 py-[90px] text-center"
         }
+        inert={phase === "journal"}
       >
         <h1
           className="animate-fade-rise max-w-7xl text-5xl font-normal leading-[0.95] tracking-[-2.46px] sm:text-7xl md:text-8xl"
