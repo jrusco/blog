@@ -59,7 +59,7 @@ export function formatDate(iso: string): string {
   });
 }
 
-export function streamTiming(count: number, slow: boolean) {
+export function streamLayout(count: number, slow: boolean) {
   const slots = count <= 3 ? Math.max(count, 1) : Math.min(5, count);
   const base = count <= 3 ? 18 : count <= 12 ? 14 : 10;
   const duration = slow ? base * 1.35 : base;

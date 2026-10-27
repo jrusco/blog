@@ -1,6 +1,6 @@
 import { useEffect, useRef, useState, type RefObject } from "react";
 import { Link } from "react-router-dom";
-import { formatDate, streamTiming, type Article } from "../lib/articles";
+import { formatDate, streamLayout, type Article } from "../lib/articles";
 
 const LANES = [
   { y: "12%", w: 232, rot: -7, z: 5 },
@@ -134,7 +134,7 @@ export function PaperStream({ articles }: { articles: Article[] }) {
     );
   }
 
-  const { slots, duration, gap, scale } = streamTiming(articles.length, narrow);
+  const { slots, duration, gap, scale } = streamLayout(articles.length, narrow);
 
   return (
     <div ref={streamRef} className="paper-stream" aria-label="Journal">
