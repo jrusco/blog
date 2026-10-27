@@ -128,6 +128,8 @@
   inset: 0;
   z-index: 20;
   overflow: hidden;
+  /* hidden still lets focus scroll the box and shift every flight path; clip forbids it. */
+  overflow: clip;
   pointer-events: none;
 }
 
