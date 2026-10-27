@@ -5,6 +5,7 @@ import { PaperStream } from "../components/PaperStream";
 import { getArticles } from "../lib/articles";
 
 const articles = getArticles();
+const SCROLL_KEYS = new Set(["ArrowDown", "PageDown", " ", "End"]);
 
 export function Home() {
   const [params, setParams] = useSearchParams();
@@ -20,10 +21,15 @@ export function Home() {
     const begin = () => setPhase("journal");
     window.addEventListener("wheel", begin, { passive: true, once: true });
     window.addEventListener("touchmove", begin, { passive: true, once: true });
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (SCROLL_KEYS.has(event.key)) begin();
+    };
+    window.addEventListener("keydown", onKeyDown);
     return () => {
       window.clearTimeout(timeout);
       window.removeEventListener("wheel", begin);
       window.removeEventListener("touchmove", begin);
+      window.removeEventListener("keydown", onKeyDown);
     };
     // setPhase is recreated each render; the effect only needs to arm once per phase.
     // eslint-disable-next-line react-hooks/exhaustive-deps
