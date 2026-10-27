@@ -38,6 +38,7 @@ function FlyingSheet({
   slotCount,
   duration,
   gap,
+  scale,
   narrow,
 }: {
   articles: Article[];
@@ -45,6 +46,7 @@ function FlyingSheet({
   slotCount: number;
   duration: number;
   gap: number;
+  scale: number;
   narrow: boolean;
 }) {
   const [cycle, setCycle] = useState(0);
@@ -62,6 +64,7 @@ function FlyingSheet({
         ["--paper-rot" as string]: `${lane.rot}deg`,
         ["--paper-dur" as string]: `${duration}s`,
         ["--paper-delay" as string]: `${slot * gap}s`,
+        ["--paper-scale" as string]: scale,
         zIndex: lane.z,
       }}
       onAnimationIteration={() => setCycle((current) => current + 1)}
@@ -98,7 +101,7 @@ export function PaperStream({ articles }: { articles: Article[] }) {
     );
   }
 
-  const { slots, duration, gap } = streamTiming(articles.length, narrow);
+  const { slots, duration, gap, scale } = streamTiming(articles.length, narrow);
 
   return (
     <div className="paper-stream" aria-label="Journal">
@@ -110,6 +113,7 @@ export function PaperStream({ articles }: { articles: Article[] }) {
           slotCount={slots}
           duration={duration}
           gap={gap}
+          scale={scale}
           narrow={narrow}
         />
       ))}
