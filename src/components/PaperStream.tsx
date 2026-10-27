@@ -65,7 +65,7 @@ function FlyingSheet({
         ["--paper-dur" as string]: `${duration}s`,
         ["--paper-delay" as string]: `${slot * gap}s`,
         ["--paper-scale" as string]: scale,
-        zIndex: lane.z,
+        ["--paper-z" as string]: lane.z,
       }}
       onAnimationIteration={() => setCycle((current) => current + 1)}
     >

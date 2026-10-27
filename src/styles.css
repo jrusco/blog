@@ -135,6 +135,7 @@
   position: absolute;
   top: var(--paper-y);
   left: 0;
+  z-index: var(--paper-z);
   display: block;
   width: var(--paper-w);
   padding: 1rem 1.05rem 1.15rem;
@@ -157,6 +158,11 @@
 .paper-sheet:focus-visible {
   outline: 2px solid hsl(var(--foreground));
   outline-offset: 3px;
+  z-index: 25;
+}
+
+.paper-stream:focus-within .paper-sheet {
+  animation-play-state: paused;
 }
 
 @media (hover: hover) and (pointer: fine) {
