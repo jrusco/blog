@@ -32,14 +32,23 @@ function visibleFraction(rect: DOMRect) {
 
 function useTabOnlyVisibleSheets(streamRef: RefObject<HTMLElement | null>) {
   useEffect(() => {
+    const sheets = () => streamRef.current?.querySelectorAll<HTMLElement>(".paper-sheet") ?? [];
     const onKeyDown = (event: KeyboardEvent) => {
-      if (event.key !== "Tab" || !streamRef.current) return;
-      for (const sheet of streamRef.current.querySelectorAll<HTMLElement>(".paper-sheet")) {
+      if (event.key !== "Tab") return;
+      for (const sheet of sheets()) {
         sheet.tabIndex = visibleFraction(sheet.getBoundingClientRect()) >= MIN_VISIBLE ? 0 : -1;
       }
     };
+    // Shift+Tab from browser chrome sends no keydown, so leaving the page must close the filter.
+    const onBlur = () => {
+      for (const sheet of sheets()) sheet.tabIndex = -1;
+    };
     window.addEventListener("keydown", onKeyDown, { capture: true });
-    return () => window.removeEventListener("keydown", onKeyDown, { capture: true });
+    window.addEventListener("blur", onBlur);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown, { capture: true });
+      window.removeEventListener("blur", onBlur);
+    };
   }, [streamRef]);
 }
 
@@ -79,6 +88,7 @@ function FlyingSheet({
     <Link
       to={`/journal/${article.slug}`}
       className="paper-sheet"
+      tabIndex={-1}
       style={{
         ["--paper-y" as string]: lane.y,
         ["--paper-w" as string]: `${width}px`,
