@@ -5,6 +5,7 @@ import { PaperStream } from "../components/PaperStream";
 import { getArticles } from "../lib/articles";
 
 const articles = getArticles();
+const SCROLL_KEYS = new Set(["ArrowDown", "PageDown", " ", "End"]);
 
 export function Home() {
   const [params, setParams] = useSearchParams();
@@ -20,10 +21,19 @@ export function Home() {
     const begin = () => setPhase("journal");
     window.addEventListener("wheel", begin, { passive: true, once: true });
     window.addEventListener("touchmove", begin, { passive: true, once: true });
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+      if (!SCROLL_KEYS.has(event.key)) return;
+      // Space activates a focused control on keyup; starting here would race its click.
+      if (event.key === " " && event.target instanceof Element && event.target.closest('button, a, [role="button"]')) return;
+      begin();
+    };
+    window.addEventListener("keydown", onKeyDown);
     return () => {
       window.clearTimeout(timeout);
       window.removeEventListener("wheel", begin);
       window.removeEventListener("touchmove", begin);
+      window.removeEventListener("keydown", onKeyDown);
     };
     // setPhase is recreated each render; the effect only needs to arm once per phase.
     // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -37,6 +47,7 @@ export function Home() {
             ? "hero-copy is-gone relative z-10 flex flex-1 flex-col items-center justify-center px-6 py-[90px] text-center"
             : "hero-copy relative z-10 flex flex-1 flex-col items-center justify-center px-6 py-[90px] text-center"
         }
+        inert={phase === "journal"}
       >
         <h1
           className="animate-fade-rise max-w-7xl text-5xl font-normal leading-[0.95] tracking-[-2.46px] sm:text-7xl md:text-8xl"

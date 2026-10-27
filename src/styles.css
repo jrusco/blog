@@ -128,6 +128,8 @@
   inset: 0;
   z-index: 20;
   overflow: hidden;
+  /* hidden still lets focus scroll the box and shift every flight path; clip forbids it. */
+  overflow: clip;
   pointer-events: none;
 }
 
@@ -135,6 +137,7 @@
   position: absolute;
   top: var(--paper-y);
   left: 0;
+  z-index: var(--paper-z);
   display: block;
   width: var(--paper-w);
   padding: 1rem 1.05rem 1.15rem;
@@ -148,12 +151,19 @@
   box-shadow:
     0 18px 40px rgba(0, 10, 20, 0.38),
     inset 0 1px 0 rgba(255, 255, 255, 0.7);
+  transform-origin: 50% 0;
+  --paper-offscreen-pad: calc(var(--paper-w) * (var(--paper-scale, 1) - 1) / 2);
   animation: paper-fly var(--paper-dur) linear var(--paper-delay) infinite backwards;
 }
 
 .paper-sheet:focus-visible {
   outline: 2px solid hsl(var(--foreground));
   outline-offset: 3px;
+  z-index: 25;
+}
+
+.paper-stream:has(.paper-sheet:focus-visible) .paper-sheet {
+  animation-play-state: paused;
 }
 
 @media (hover: hover) and (pointer: fine) {
@@ -194,13 +204,13 @@
 
 @keyframes paper-fly {
   0% {
-    transform: translate3d(108vw, 0, 0) rotate(var(--paper-rot));
+    transform: translate3d(calc(108vw + var(--paper-offscreen-pad)), 0, 0) rotate(var(--paper-rot)) scale(var(--paper-scale, 1));
   }
   45% {
-    transform: translate3d(38vw, -18px, 0) rotate(calc(var(--paper-rot) * 0.35));
+    transform: translate3d(38vw, -18px, 0) rotate(calc(var(--paper-rot) * 0.35)) scale(var(--paper-scale, 1));
   }
   100% {
-    transform: translate3d(-48vw, 10px, 0) rotate(calc(var(--paper-rot) * -0.45));
+    transform: translate3d(calc(-48vw - var(--paper-offscreen-pad)), 10px, 0) rotate(calc(var(--paper-rot) * -0.45)) scale(var(--paper-scale, 1));
   }
 }
 

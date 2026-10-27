@@ -1,6 +1,7 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState, type RefObject } from "react";
 import { Link } from "react-router-dom";
-import { formatDate, streamTiming, type Article } from "../lib/articles";
+import { formatDate, streamLayout, type Article } from "../lib/articles";
+import { isTabReachable } from "../lib/visibility";
 
 const LANES = [
   { y: "12%", w: 232, rot: -7, z: 5 },
@@ -22,6 +23,28 @@ function useMedia(query: string) {
   return matches;
 }
 
+function useTabOnlyVisibleSheets(streamRef: RefObject<HTMLElement | null>) {
+  useEffect(() => {
+    const sheets = () => streamRef.current?.querySelectorAll<HTMLElement>(".paper-sheet") ?? [];
+    const onKeyDown = (event: KeyboardEvent) => {
+      if (event.key !== "Tab") return;
+      for (const sheet of sheets()) {
+        sheet.tabIndex = isTabReachable(sheet.getBoundingClientRect(), window.innerWidth, window.innerHeight) ? 0 : -1;
+      }
+    };
+    // Shift+Tab from browser chrome sends no keydown, so leaving the page must close the filter.
+    const onBlur = () => {
+      for (const sheet of sheets()) sheet.tabIndex = -1;
+    };
+    window.addEventListener("keydown", onKeyDown, { capture: true });
+    window.addEventListener("blur", onBlur);
+    return () => {
+      window.removeEventListener("keydown", onKeyDown, { capture: true });
+      window.removeEventListener("blur", onBlur);
+    };
+  }, [streamRef]);
+}
+
 function SheetFace({ article }: { article: Article }) {
   return (
     <>
@@ -38,6 +61,7 @@ function FlyingSheet({
   slotCount,
   duration,
   gap,
+  scale,
   narrow,
 }: {
   articles: Article[];
@@ -45,6 +69,7 @@ function FlyingSheet({
   slotCount: number;
   duration: number;
   gap: number;
+  scale: number;
   narrow: boolean;
 }) {
   const [cycle, setCycle] = useState(0);
@@ -56,13 +81,15 @@ function FlyingSheet({
     <Link
       to={`/journal/${article.slug}`}
       className="paper-sheet"
+      tabIndex={-1}
       style={{
         ["--paper-y" as string]: lane.y,
         ["--paper-w" as string]: `${width}px`,
         ["--paper-rot" as string]: `${lane.rot}deg`,
         ["--paper-dur" as string]: `${duration}s`,
         ["--paper-delay" as string]: `${slot * gap}s`,
-        zIndex: lane.z,
+        ["--paper-scale" as string]: scale,
+        ["--paper-z" as string]: lane.z,
       }}
       onAnimationIteration={() => setCycle((current) => current + 1)}
     >
@@ -74,6 +101,8 @@ function FlyingSheet({
 export function PaperStream({ articles }: { articles: Article[] }) {
   const reduced = useMedia("(prefers-reduced-motion: reduce)");
   const narrow = useMedia("(max-width: 760px)");
+  const streamRef = useRef<HTMLDivElement>(null);
+  useTabOnlyVisibleSheets(streamRef);
 
   if (articles.length === 0) {
     return (
@@ -98,10 +127,10 @@ export function PaperStream({ articles }: { articles: Article[] }) {
     );
   }
 
-  const { slots, duration, gap } = streamTiming(articles.length, narrow);
+  const { slots, duration, gap, scale } = streamLayout(articles.length, narrow);
 
   return (
-    <div className="paper-stream" aria-label="Journal">
+    <div ref={streamRef} className="paper-stream" aria-label="Journal">
       {Array.from({ length: slots }, (_, slot) => (
         <FlyingSheet
           key={slot}
@@ -110,6 +139,7 @@ export function PaperStream({ articles }: { articles: Article[] }) {
           slotCount={slots}
           duration={duration}
           gap={gap}
+          scale={scale}
           narrow={narrow}
         />
       ))}
