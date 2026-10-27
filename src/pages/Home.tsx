@@ -22,7 +22,11 @@ export function Home() {
     window.addEventListener("wheel", begin, { passive: true, once: true });
     window.addEventListener("touchmove", begin, { passive: true, once: true });
     const onKeyDown = (event: KeyboardEvent) => {
-      if (SCROLL_KEYS.has(event.key)) begin();
+      if (event.defaultPrevented || event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
+      if (!SCROLL_KEYS.has(event.key)) return;
+      // Space activates a focused control on keyup; starting here would race its click.
+      if (event.key === " " && event.target instanceof Element && event.target.closest('button, a, [role="button"]')) return;
+      begin();
     };
     window.addEventListener("keydown", onKeyDown);
     return () => {
