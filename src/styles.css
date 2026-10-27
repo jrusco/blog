@@ -162,7 +162,7 @@
   z-index: 25;
 }
 
-.paper-stream:focus-within .paper-sheet {
+.paper-stream:has(.paper-sheet:focus-visible) .paper-sheet {
   animation-play-state: paused;
 }
 
