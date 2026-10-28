@@ -1,7 +1,7 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 
-const VIDEO_SRC = "/hero.mp4";
+const VIDEO_SRC = `${import.meta.env.BASE_URL}hero.mp4`;
 const displayFont = { fontFamily: "'Instrument Serif', serif" } as const;
 
 const LINKS = ["Studio", "About", "Reach Us"] as const;
