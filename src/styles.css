@@ -226,6 +226,11 @@
     border-radius: 2px;
   }
   ::selection { background-color: var(--c-accent); color: var(--c-page); }
+
+  button:not(:disabled),
+  [role="button"]:not(:disabled) {
+    cursor: pointer;
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
