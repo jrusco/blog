@@ -2,7 +2,7 @@ import { Link, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import { Column } from "../components/Column";
 import { formatDate, getArticle } from "../lib/articles";
-import { JOURNAL_PHASE } from "../lib/journal-phase";
+import { phaseSearch } from "../lib/journal-phase";
 
 export function ArticlePage() {
   const { slug } = useParams();
@@ -11,7 +11,7 @@ export function ArticlePage() {
   return (
     <Column>
       <article className="w-full pb-24 pt-8">
-        <Link to={{ pathname: "/", search: `?${JOURNAL_PHASE}` }} className="text-meta text-muted hover:text-ink">
+        <Link to={{ pathname: "/", search: phaseSearch("journal") }} className="text-meta text-muted hover:text-ink">
           ← The field
         </Link>
         {article ? (
