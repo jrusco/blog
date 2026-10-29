@@ -43,8 +43,21 @@ describe("ArchiveList", () => {
     expect(html).toContain("Notes from the hours after the inbox gives up.");
     expect(html).toContain("sm:grid-cols-[7rem_minmax(0,1fr)]");
     expect(html).toContain("sm:items-baseline");
+    expect(html).toContain("no-underline");
+    expect(html).toContain("decoration-accent");
+    expect(html).toContain("underline-offset-[0.2em]");
+    expect(html).toContain("hover:underline");
+    expect(html).toContain("focus-visible:underline");
+    expect(html).not.toContain("Nothing here yet.");
     expect(html.match(/<li/g)).toHaveLength(2);
     expect(html.match(/<ol/g)).toHaveLength(2);
+  });
+
+  it("says nothing is here when the journal is empty", () => {
+    const html = render([]);
+    expect(html).toContain("Nothing here yet.");
+    expect(html).not.toContain("<ol");
+    expect(html).not.toContain("<h2");
   });
 
   it("lists the live journal newest first", () => {

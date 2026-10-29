@@ -18,7 +18,12 @@ export function ArchivePage() {
 }
 
 export function ArchiveList({ posts }: { posts: readonly Article[] }) {
-  return ArchiveIndex.byYear(posts).map((group) => (
+  const years = ArchiveIndex.byYear(posts);
+  if (years.length === 0) {
+    return <p className="mt-12 text-body text-muted">Nothing here yet.</p>;
+  }
+
+  return years.map((group) => (
     <section key={group.year} className="mt-12">
       <h2 className="font-mono text-small font-normal text-muted">{group.year}</h2>
       <ol className="mt-4 flex flex-col gap-6">
@@ -31,7 +36,10 @@ export function ArchiveList({ posts }: { posts: readonly Article[] }) {
               {post.date}
             </time>
             <div className="min-w-0">
-              <Link to={`/journal/${post.slug}`} className="font-serif text-list-title font-semibold text-ink">
+              <Link
+                to={`/journal/${post.slug}`}
+                className="font-serif text-list-title font-semibold text-ink no-underline decoration-accent underline-offset-[0.2em] hover:underline focus-visible:underline"
+              >
                 {post.title}
               </Link>
               <p className="mt-2 font-serif text-summary font-normal text-muted">{post.summary}</p>
