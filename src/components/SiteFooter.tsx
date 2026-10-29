@@ -1,4 +1,4 @@
-import { LINKS } from "../site.js";
+import { LINKS } from "../site";
 import { Column } from "./Column";
 
 export function SiteFooter() {
