@@ -1,6 +1,8 @@
 node_modules
 dist
 .DS_Store
+01-foundation/
+01-foundation.zip
 *.local
 .env
 .env.*
