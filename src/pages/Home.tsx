@@ -13,6 +13,7 @@ export function Home() {
 
   return (
     <Field>
+      <h1 className="sr-only">Criterio · a public notebook</h1>
       <PaperStream articles={articles} />
       <SiteFooter />
     </Field>
