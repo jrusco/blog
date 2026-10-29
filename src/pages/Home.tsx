@@ -1,18 +1,19 @@
 import { useEffect } from "react";
 import { useSearchParams } from "react-router-dom";
-import { Field, displayFont } from "../components/Field";
+import { Field } from "../components/Field";
 import { PaperStream } from "../components/PaperStream";
 import { getArticles } from "../lib/articles";
+import { phaseOf, phaseSearch, type Phase } from "../lib/journal-phase";
 
 const articles = getArticles();
 const SCROLL_KEYS = new Set(["ArrowDown", "PageDown", " ", "End"]);
 
 export function Home() {
   const [params, setParams] = useSearchParams();
-  const phase = params.get("stream") === "1" ? "journal" : "arrive";
+  const phase = phaseOf(params);
 
-  function setPhase(next: "arrive" | "journal") {
-    setParams(next === "journal" ? { stream: "1" } : {}, { replace: true });
+  function setPhase(next: Phase) {
+    setParams(phaseSearch(next), { replace: true });
   }
 
   useEffect(() => {
@@ -40,8 +41,8 @@ export function Home() {
   }, [phase]);
 
   return (
-    <Field phase={phase} onHome={() => setPhase("arrive")} onJournal={() => setPhase("journal")} onBegin={() => setPhase("journal")}>
-      <main
+    <Field>
+      <section
         className={
           phase === "journal"
             ? "hero-copy is-gone relative z-10 flex flex-1 flex-col items-center justify-center px-6 py-[90px] text-center"
@@ -49,25 +50,18 @@ export function Home() {
         }
         inert={phase === "journal"}
       >
-        <h1
-          className="animate-fade-rise max-w-7xl text-5xl font-normal leading-[0.95] tracking-[-2.46px] sm:text-7xl md:text-8xl"
-          style={displayFont}
-        >
-          Where <em className="not-italic text-muted-foreground">dreams</em> rise{" "}
-          <em className="not-italic text-muted-foreground">through the silence.</em>
-        </h1>
-        <p className="animate-fade-rise-delay mt-8 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+        <p className="animate-fade-rise-delay mt-8 max-w-2xl text-summary leading-relaxed text-on-video sm:text-body">
           We're designing tools for deep thinkers, bold creators, and quiet rebels. Amid the chaos, we
           build digital spaces for sharp focus and inspired work.
         </p>
         <button
           type="button"
           onClick={() => setPhase("journal")}
-          className="liquid-glass animate-fade-rise-delay-2 mt-12 rounded-full px-14 py-5 text-base text-foreground"
+          className="liquid-glass animate-fade-rise-delay-2 mt-12 rounded-full px-14 py-5 text-summary text-on-video"
         >
           Begin Journey
         </button>
-      </main>
+      </section>
       {phase === "journal" ? <PaperStream articles={articles} /> : null}
     </Field>
   );

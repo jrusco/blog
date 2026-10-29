@@ -1,48 +1,245 @@
 @import "tailwindcss";
 
-@theme inline {
-  --font-sans: "Inter", sans-serif;
-  --font-display: "Instrument Serif", serif;
-  --color-background: hsl(var(--background));
-  --color-foreground: hsl(var(--foreground));
-  --color-muted: hsl(var(--muted));
-  --color-muted-foreground: hsl(var(--muted-foreground));
-  --color-primary: hsl(var(--primary));
-  --color-primary-foreground: hsl(var(--primary-foreground));
-  --color-secondary: hsl(var(--secondary));
-  --color-accent: hsl(var(--accent));
-  --color-border: hsl(var(--border));
-  --color-input: hsl(var(--input));
-  --color-ring: hsl(var(--foreground));
+@font-face {
+  font-family: "Newsreader";
+  src: url("/fonts/newsreader-roman.woff2") format("woff2");
+  font-weight: 400 600;
+  font-style: normal;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Newsreader";
+  src: url("/fonts/newsreader-italic.woff2") format("woff2");
+  font-weight: 400;
+  font-style: italic;
+  font-display: swap;
+}
+@font-face {
+  font-family: "IBM Plex Mono";
+  src: url("/fonts/plex-mono-400.woff2") format("woff2");
+  font-weight: 400;
+  font-style: normal;
+  font-display: swap;
 }
 
+/* Metric-matched fallbacks: same line box and line length as the web fonts,
+   so the swap does not move text. */
+@font-face {
+  font-family: "Newsreader Fallback";
+  src: local("Times New Roman"), local("Tinos"), local("Liberation Serif");
+  size-adjust: 100.5%;
+  ascent-override: 73.2%;
+  descent-override: 26.4%;
+  line-gap-override: 0%;
+}
+@font-face {
+  font-family: "Plex Mono Fallback";
+  src: local("Menlo"), local("Courier New"), local("Liberation Mono"), local("Cousine");
+  size-adjust: 100%;
+  ascent-override: 102.5%;
+  descent-override: 27.5%;
+  line-gap-override: 0%;
+}
+
+/* Dark is the signature and the fallback.
+   dark:* utilities follow <html data-theme>, not the OS. */
+@custom-variant dark (&:where([data-theme=dark], [data-theme=dark] *));
+
+/* Raw palette. Switched on <html data-theme>. Not utilities. */
+:root,
+[data-theme="dark"] {
+  color-scheme: dark;
+  --c-page: #0a2638;
+  --c-surface: #0b3951;
+  --c-ink: #f3ead2;
+  --c-muted: #93a6ae;
+  --c-accent: #ebb032;
+  --c-marigold: #d18c1c;
+  --c-hairline: #1e4a63;
+  --c-focus: #ebb032;
+  --c-code-comment: #93a6ae;
+  --c-code-keyword: #ebb032;
+  --c-code-string: #a9d4a0;
+  --c-code-function: #8cc8ec;
+  --c-code-number: #f2a37e;
+}
+
+[data-theme="light"] {
+  color-scheme: light;
+  --c-page: #f7f1e1;
+  --c-surface: #ede3c9;
+  --c-ink: #0a2638;
+  --c-muted: #55666e;
+  --c-accent: #8a5a00;   /* was #976300: 4.01:1 on surface */
+  --c-marigold: #af7517; /* was #bd7e19: 2.67:1 on surface */
+  --c-hairline: #d6c9a8;
+  --c-focus: #8a5a00;
+  --c-code-comment: #55666e;
+  --c-code-keyword: #8a5a00;
+  --c-code-string: #3c6a2e;
+  --c-code-function: #1d5a86;
+  --c-code-number: #a23d17;
+}
+
+/* No JS: follow the OS when it asks for light; dark otherwise. */
+@media (prefers-color-scheme: light) {
+  :root:not([data-theme]) {
+    color-scheme: light;
+    --c-page: #f7f1e1;
+    --c-surface: #ede3c9;
+    --c-ink: #0a2638;
+    --c-muted: #55666e;
+    --c-accent: #8a5a00;
+    --c-marigold: #af7517;
+    --c-hairline: #d6c9a8;
+    --c-focus: #8a5a00;
+    --c-code-comment: #55666e;
+    --c-code-keyword: #8a5a00;
+    --c-code-string: #3c6a2e;
+    --c-code-function: #1d5a86;
+    --c-code-number: #a23d17;
+  }
+}
+
+/* Values with no Tailwind namespace, or that change by breakpoint. */
 :root {
-  --background: 201 100% 13%;
-  --foreground: 0 0% 100%;
-  --muted-foreground: 240 4% 66%;
-  --primary: 0 0% 100%;
-  --primary-foreground: 0 0% 4%;
-  --secondary: 0 0% 10%;
-  --muted: 0 0% 10%;
-  --accent: 0 0% 10%;
-  --border: 0 0% 18%;
-  --input: 0 0% 18%;
-  --font-display: "Instrument Serif", serif;
-  --font-body: "Inter", sans-serif;
+  --lh-body: 1.6;
+  --motion-ease: cubic-bezier(0.2, 0, 0, 1);
+  --dur-fast: 120ms;  /* link underline, hover color */
+  --dur-base: 200ms;  /* button background, copy state */
+  --dur-slow: 600ms;  /* hero video fades in over its poster */
+}
+@media (width >= 64rem) {
+  :root { --lh-body: 1.65; }
+}
+
+/* inline: utilities emit var(--c-*) directly, so they follow data-theme. */
+@theme inline {
+  /* Fonts (the @font-face rules sit above this block) */
+  --font-serif: "Newsreader", "Newsreader Fallback", Georgia, serif;
+  --font-mono: "IBM Plex Mono", "Plex Mono Fallback", ui-monospace, monospace;
+  --default-font-family: var(--font-serif);
+  --default-mono-font-family: var(--font-mono);
+
+  /* Type: fluid from 360px to 1024px; each size carries its leading */
+  --text-*: initial;
+  --text-hero: clamp(2.5rem, 1.9578rem + 2.4096vw, 3.5rem);
+  --text-hero--line-height: 1.05;
+  --text-hero--letter-spacing: -0.015em;
+  --text-hero--font-weight: 600;
+  --text-title: clamp(2rem, 1.5934rem + 1.8072vw, 2.75rem);
+  --text-title--line-height: 1.15;
+  --text-title--letter-spacing: -0.01em;
+  --text-title--font-weight: 600;
+  --text-h2: clamp(1.5rem, 1.3645rem + 0.6024vw, 1.75rem);
+  --text-h2--line-height: 1.25;
+  --text-h2--font-weight: 600;
+  --text-h3: clamp(1.25rem, 1.1822rem + 0.3012vw, 1.375rem);
+  --text-h3--line-height: 1.3;
+  --text-h3--font-weight: 600;
+  --text-list-title: clamp(1.375rem, 1.3072rem + 0.3012vw, 1.5rem);
+  --text-list-title--line-height: 1.3;
+  --text-list-title--font-weight: 500;
+  --text-wordmark: clamp(1.25rem, 1.1822rem + 0.3012vw, 1.375rem);
+  --text-wordmark--line-height: 1;
+  --text-wordmark--font-weight: 600;
+  --text-body: clamp(1.125rem, 1.0572rem + 0.3012vw, 1.25rem);
+  --text-body--line-height: var(--lh-body);
+  --text-summary: clamp(1rem, 0.9661rem + 0.1506vw, 1.0625rem);
+  --text-summary--line-height: 1.5;
+  --text-small: clamp(0.9375rem, 0.9036rem + 0.1506vw, 1rem);
+  --text-small--line-height: 1.5;
+  --text-code: clamp(0.875rem, 0.8411rem + 0.1506vw, 0.9375rem);
+  --text-code--line-height: 1.6;
+  --text-meta: clamp(0.75rem, 0.7161rem + 0.1506vw, 0.8125rem);
+  --text-meta--line-height: 1.4;
+  --text-meta--letter-spacing: 0.06em;
+
+  /* Spacing: one base unit. p-6 = 6 x 4px = 24px */
+  --spacing: 0.25rem;
+
+  /* Measures */
+  --container-measure: 35rem; /* ~70 characters of Newsreader at 20px */
+  --container-wide: 46rem;    /* image and code breakout */
+
+  /* Color: semantic roles only; the default palette is removed */
+  --color-*: initial;
+  --color-page: var(--c-page);
+  --color-surface: var(--c-surface);
+  --color-ink: var(--c-ink);
+  --color-muted: var(--c-muted);
+  --color-accent: var(--c-accent);
+  --color-marigold: var(--c-marigold);
+  --color-hairline: var(--c-hairline);
+  --color-focus: var(--c-focus);
+  --color-code-comment: var(--c-code-comment);
+  --color-code-keyword: var(--c-code-keyword);
+  --color-code-string: var(--c-code-string);
+  --color-code-function: var(--c-code-function);
+  --color-code-number: var(--c-code-number);
+  --color-on-video: #f3ead2;               /* same in both themes */
+  --color-scrim: rgb(10 38 56 / 0.72);     /* hero overlay */
+
+  /* Shape: almost no rounding, no shadows */
+  --radius-*: initial;
+  --radius-sm: 2px;
+  --shadow-*: initial;
+  --inset-shadow-*: initial;
+  --drop-shadow-*: initial;
+  --text-shadow-*: initial;
+
+  /* Breakpoints: two */
+  --breakpoint-*: initial;
+  --breakpoint-sm: 40rem;  /* 640px */
+  --breakpoint-lg: 64rem;  /* 1024px */
+
+  /* Motion */
+  --ease-*: initial;
+  --ease-quiet: var(--motion-ease);
+  --animate-*: initial;
+  --animate-fade-in: fade-in 600ms cubic-bezier(0.2, 0, 0, 1) both;
+  @keyframes fade-in {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
 }
 
 @layer base {
-  html,
-  body {
-    min-height: 100%;
-    background: hsl(var(--background));
-    color: hsl(var(--foreground));
-    font-family: var(--font-body);
+  html { background-color: var(--c-page); color: var(--c-ink); }
+  body { font-size: var(--text-body); line-height: var(--lh-body); }
+  h1, h2, h3 { text-wrap: balance; }
+  p, li { text-wrap: pretty; }
+
+  a {
+    color: var(--c-accent);
+    text-decoration-line: underline;
+    text-decoration-thickness: 1px;
+    text-underline-offset: 0.2em;
+    text-decoration-color: color-mix(in srgb, currentColor 55%, transparent);
+    transition: text-decoration-color var(--dur-fast) var(--motion-ease);
   }
+  a:hover { text-decoration-color: currentColor; text-decoration-thickness: 2px; }
+
+  :focus-visible {
+    outline: 2px solid var(--c-focus);
+    outline-offset: 3px;
+    border-radius: 2px;
+  }
+  ::selection { background-color: var(--c-accent); color: var(--c-page); }
 
   button:not(:disabled),
   [role="button"]:not(:disabled) {
     cursor: pointer;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-delay: 0s !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
   }
 }
 
@@ -103,14 +300,6 @@
   animation: fade-rise 0.8s ease-out 0.4s both;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .animate-fade-rise,
-  .animate-fade-rise-delay,
-  .animate-fade-rise-delay-2 {
-    animation: none;
-  }
-}
-
 .hero-copy {
   transition:
     opacity 0.9s ease,
@@ -157,7 +346,7 @@
 }
 
 .paper-sheet:focus-visible {
-  outline: 2px solid hsl(var(--foreground));
+  outline: 2px solid var(--c-focus);
   outline-offset: 3px;
   z-index: 25;
 }
@@ -175,7 +364,7 @@
 
 .paper-kicker {
   display: block;
-  font-family: Inter, sans-serif;
+  font-family: var(--font-mono);
   font-size: 0.65rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -185,7 +374,7 @@
 .paper-title {
   display: block;
   margin-top: 0.35rem;
-  font-family: "Instrument Serif", serif;
+  font-family: var(--font-serif);
   font-size: 1.35rem;
   line-height: 1.05;
 }
@@ -194,7 +383,7 @@
   display: -webkit-box;
   margin-top: 0.5rem;
   overflow: hidden;
-  font-family: Inter, sans-serif;
+  font-family: var(--font-mono);
   font-size: 0.75rem;
   line-height: 1.35;
   color: rgba(42, 33, 24, 0.72);
@@ -237,9 +426,3 @@
 .article-body p + p {
   margin-top: 1.1rem;
 }
-
-.article-body a {
-  text-decoration: underline;
-  text-underline-offset: 3px;
-}
-
