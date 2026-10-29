@@ -1,6 +1,5 @@
 import { NavLink } from "react-router-dom";
 import { Column } from "./Column";
-import { ThemeToggle } from "./ThemeToggle";
 
 export function SiteHeader() {
   return (
@@ -14,15 +13,12 @@ export function SiteHeader() {
           >
             Criterio
           </NavLink>
-          <div className="flex items-center gap-2">
-            <NavLink
-              to="/archive"
-              className="font-mono text-meta uppercase text-muted inline-flex items-center min-h-11 px-2 hover:text-ink aria-[current=page]:text-ink aria-[current=page]:decoration-current"
-            >
-              Archive
-            </NavLink>
-            <ThemeToggle />
-          </div>
+          <NavLink
+            to="/archive"
+            className="font-mono text-meta uppercase text-muted inline-flex items-center min-h-11 px-2 hover:text-ink aria-[current=page]:text-ink aria-[current=page]:decoration-current"
+          >
+            Archive
+          </NavLink>
         </nav>
       </Column>
     </header>
