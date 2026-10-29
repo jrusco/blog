@@ -1,4 +1,5 @@
 import type { ReactNode } from "react";
+import { SiteFooter } from "./SiteFooter";
 import { SiteHeader } from "./SiteHeader";
 
 export function Shell({ children }: { children: ReactNode }) {
@@ -14,7 +15,7 @@ export function Shell({ children }: { children: ReactNode }) {
       <main id="main" tabIndex={-1} className="outline-none">
         {children}
       </main>
-      <footer />
+      <SiteFooter />
     </>
   );
 }
