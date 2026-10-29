@@ -32,7 +32,7 @@ export function setTheme(next: Theme): void {
     if (next === systemTheme()) localStorage.removeItem("theme");
     else localStorage.setItem("theme", next);
   } catch {
-    // Storage can be blocked. The attribute still paints this visit.
+    return;
   }
 }
 
