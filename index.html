@@ -2,8 +2,24 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Criterio</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Criterio · a public notebook</title>
+    <meta name="description" content="TODO: one sentence on what Criterio is." />
+    <meta name="theme-color" content="#0a2638" />
+    <link rel="preload" href="/fonts/newsreader-roman.woff2" as="font" type="font/woff2" crossorigin />
+    <link rel="alternate" type="application/rss+xml" title="Criterio" href="/blog/rss.xml" />
+    <script>
+      (function () {
+        var t;
+        try { t = localStorage.getItem("theme"); } catch (e) {}
+        if (t !== "light" && t !== "dark") {
+          t = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
+        }
+        document.documentElement.dataset.theme = t;
+        document.querySelector('meta[name="theme-color"]').content =
+          t === "light" ? "#f7f1e1" : "#0a2638";
+      })();
+    </script>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body>
