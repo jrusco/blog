@@ -1,8 +1,15 @@
-import type { ReactNode } from "react";
+import { useLayoutEffect, type ReactNode } from "react";
+import { useLocation } from "react-router-dom";
 import { SiteFooter } from "./SiteFooter";
 import { SiteHeader } from "./SiteHeader";
 
 export function Shell({ children }: { children: ReactNode }) {
+  const { pathname } = useLocation();
+
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
   return (
     <div className="flex min-h-dvh flex-col">
       <a
