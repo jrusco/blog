@@ -4,20 +4,12 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Criterio · a public notebook</title>
+    <meta name="description" content="Notes on keeping your own judgment in the age of average answers." />
     <meta name="theme-color" content="#0a2638" />
+    <meta name="color-scheme" content="dark" />
+    <style>html{background:#0a2638;color:#f3ead2}</style>
     <link rel="preload" href="/fonts/newsreader-roman.woff2" as="font" type="font/woff2" crossorigin />
-    <script>
-      (function () {
-        var t;
-        try { t = localStorage.getItem("theme"); } catch (e) {}
-        if (t !== "light" && t !== "dark") {
-          t = matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
-        }
-        document.documentElement.dataset.theme = t;
-        document.querySelector('meta[name="theme-color"]').content =
-          t === "light" ? "#f7f1e1" : "#0a2638";
-      })();
-    </script>
+    <link rel="alternate" type="application/rss+xml" title="Criterio" href="/blog/rss.xml" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
   </head>
   <body>

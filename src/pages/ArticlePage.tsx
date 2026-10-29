@@ -1,18 +1,22 @@
+import { useLayoutEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import { Column } from "../components/Column";
 import { formatDate, getArticle } from "../lib/articles";
-import { phaseSearch } from "../lib/journal-phase";
 
 export function ArticlePage() {
   const { slug } = useParams();
   const article = slug ? getArticle(slug) : undefined;
 
+  useLayoutEffect(() => {
+    document.title = article ? `${article.title} · Criterio` : "Not found · Criterio";
+  }, [article?.title]);
+
   return (
     <Column>
       <article className="w-full pb-24 pt-8">
-        <Link to={{ pathname: "/", search: phaseSearch("journal") }} className="text-meta text-muted hover:text-ink">
-          ← The field
+        <Link to="/" className="text-meta text-muted hover:text-ink">
+          ← Criterio
         </Link>
         {article ? (
           <>
