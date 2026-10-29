@@ -1,15 +1,18 @@
 export type Theme = "light" | "dark";
 
+const LIGHT_QUERY = "(prefers-color-scheme: light)";
+
 function parseTheme(value: string | null | undefined): Theme | null {
   if (value === "light" || value === "dark") return value;
   return null;
 }
 
+function systemTheme(): Theme {
+  return matchMedia(LIGHT_QUERY).matches ? "light" : "dark";
+}
+
 export function readTheme(): Theme {
-  return (
-    parseTheme(document.documentElement.dataset.theme) ??
-    (matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark")
-  );
+  return parseTheme(document.documentElement.dataset.theme) ?? systemTheme();
 }
 
 function storedTheme(): Theme | null {
@@ -18,10 +21,6 @@ function storedTheme(): Theme | null {
   } catch {
     return null;
   }
-}
-
-function systemTheme(): Theme {
-  return matchMedia("(prefers-color-scheme: light)").matches ? "light" : "dark";
 }
 
 export function setTheme(next: Theme): void {
@@ -38,7 +37,7 @@ export function setTheme(next: Theme): void {
 
 export function followSystemTheme(onChange: (theme: Theme) => void): () => void {
   if (storedTheme() !== null) return () => {};
-  const media = matchMedia("(prefers-color-scheme: light)");
+  const media = matchMedia(LIGHT_QUERY);
   const onMedia = () => {
     const next = systemTheme();
     setTheme(next);
