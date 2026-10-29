@@ -46,7 +46,7 @@ describe("ArchiveList", () => {
     expect(html).toContain("no-underline");
     expect(html).toContain("decoration-accent");
     expect(html).toContain("underline-offset-[0.2em]");
-    expect(html).toContain("hover:underline");
+    expect(html).toContain(":hover]:underline");
     expect(html).toContain("focus-visible:underline");
     expect(html).not.toContain("Nothing here yet.");
     expect(html.match(/<li/g)).toHaveLength(2);

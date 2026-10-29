@@ -38,7 +38,7 @@ export function ArchiveList({ posts }: { posts: readonly Article[] }) {
             <div className="min-w-0">
               <Link
                 to={`/journal/${post.slug}`}
-                className="font-serif text-list-title font-semibold text-ink no-underline decoration-accent underline-offset-[0.2em] hover:underline focus-visible:underline"
+                className="font-serif text-list-title font-semibold text-ink no-underline decoration-accent underline-offset-[0.2em] [&:hover]:underline focus-visible:underline"
               >
                 {post.title}
               </Link>
