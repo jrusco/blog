@@ -5,6 +5,7 @@ import { SiteHeader } from "./SiteHeader";
 
 export function Shell({ children }: { children: ReactNode }) {
   const { pathname } = useLocation();
+  const onHome = pathname === "/";
 
   useLayoutEffect(() => {
     window.scrollTo(0, 0);
@@ -22,7 +23,7 @@ export function Shell({ children }: { children: ReactNode }) {
       <main id="main" tabIndex={-1} className="flex flex-1 flex-col outline-none">
         {children}
       </main>
-      <SiteFooter />
+      {onHome ? null : <SiteFooter />}
     </div>
   );
 }
