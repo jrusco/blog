@@ -7,7 +7,7 @@ export function ArchivePage() {
   }, []);
 
   return (
-    <Column>
+    <Column className="pt-8">
       <h1 className="text-title">Archive</h1>
     </Column>
   );
