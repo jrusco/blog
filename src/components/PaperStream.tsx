@@ -130,7 +130,7 @@ export function PaperStream({ articles }: { articles: Article[] }) {
   const { slots, duration, gap, scale } = streamLayout(articles.length, narrow);
 
   return (
-    <div ref={streamRef} className="paper-stream" aria-label="Journal">
+    <div ref={streamRef} className="paper-stream" aria-label="Essays">
       {Array.from({ length: slots }, (_, slot) => (
         <FlyingSheet
           key={slot}

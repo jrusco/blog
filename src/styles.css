@@ -1,8 +1,8 @@
 @import "tailwindcss";
 
 @theme inline {
-  --font-sans: "Inter", sans-serif;
-  --font-display: "Instrument Serif", serif;
+  --font-sans: ui-monospace, monospace;
+  --font-display: Georgia, serif;
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
   --color-muted: hsl(var(--muted));
@@ -27,8 +27,8 @@
   --accent: 0 0% 10%;
   --border: 0 0% 18%;
   --input: 0 0% 18%;
-  --font-display: "Instrument Serif", serif;
-  --font-body: "Inter", sans-serif;
+  --font-display: Georgia, serif;
+  --font-body: ui-monospace, monospace;
 }
 
 @layer base {
@@ -175,7 +175,7 @@
 
 .paper-kicker {
   display: block;
-  font-family: Inter, sans-serif;
+  font-family: ui-monospace, monospace;
   font-size: 0.65rem;
   letter-spacing: 0.14em;
   text-transform: uppercase;
@@ -185,7 +185,7 @@
 .paper-title {
   display: block;
   margin-top: 0.35rem;
-  font-family: "Instrument Serif", serif;
+  font-family: Georgia, serif;
   font-size: 1.35rem;
   line-height: 1.05;
 }
@@ -194,7 +194,7 @@
   display: -webkit-box;
   margin-top: 0.5rem;
   overflow: hidden;
-  font-family: Inter, sans-serif;
+  font-family: ui-monospace, monospace;
   font-size: 0.75rem;
   line-height: 1.35;
   color: rgba(42, 33, 24, 0.72);
