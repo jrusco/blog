@@ -1,5 +1,6 @@
 export type Theme = "light" | "dark";
 
+const STORAGE_KEY = "theme";
 const LIGHT_QUERY = "(prefers-color-scheme: light)";
 
 // Stands in for localStorage when it throws, so a toggle still outranks the OS.
@@ -20,7 +21,7 @@ export function readTheme(): Theme {
 
 function storedTheme(): Theme | null {
   try {
-    return parseTheme(localStorage.getItem("theme"));
+    return parseTheme(localStorage.getItem(STORAGE_KEY));
   } catch {
     return unsavedTheme;
   }
@@ -32,8 +33,8 @@ export function setTheme(next: Theme): void {
   if (meta instanceof HTMLMetaElement) meta.content = next === "light" ? "#f7f1e1" : "#0a2638";
   unsavedTheme = next === systemTheme() ? null : next;
   try {
-    if (unsavedTheme === null) localStorage.removeItem("theme");
-    else localStorage.setItem("theme", next);
+    if (unsavedTheme === null) localStorage.removeItem(STORAGE_KEY);
+    else localStorage.setItem(STORAGE_KEY, next);
   } catch {
     // unsavedTheme keeps the choice until the page reloads.
   }
