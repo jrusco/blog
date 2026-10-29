@@ -15,7 +15,7 @@ export function ArticlePage() {
   return (
     <Column>
       <article className="w-full pb-24 pt-8">
-        <Link to="/" className="text-meta text-muted hover:text-ink">
+        <Link to="/" className="inline-flex items-center min-h-11 text-meta text-muted hover:text-ink">
           ← Criterio
         </Link>
         {article ? (
