@@ -1,3 +1,4 @@
+import { useLayoutEffect } from "react";
 import { Link, useParams } from "react-router-dom";
 import ReactMarkdown from "react-markdown";
 import { Column } from "../components/Column";
@@ -6,6 +7,10 @@ import { formatDate, getArticle } from "../lib/articles";
 export function ArticlePage() {
   const { slug } = useParams();
   const article = slug ? getArticle(slug) : undefined;
+
+  useLayoutEffect(() => {
+    document.title = article ? `${article.title} · Criterio` : "Not found · Criterio";
+  }, [article?.title]);
 
   return (
     <Column>

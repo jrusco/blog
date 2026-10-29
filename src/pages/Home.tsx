@@ -1,3 +1,4 @@
+import { useLayoutEffect } from "react";
 import { Field } from "../components/Field";
 import { PaperStream } from "../components/PaperStream";
 import { getArticles } from "../lib/articles";
@@ -5,6 +6,10 @@ import { getArticles } from "../lib/articles";
 const articles = getArticles();
 
 export function Home() {
+  useLayoutEffect(() => {
+    document.title = "Criterio · a public notebook";
+  }, []);
+
   return (
     <Field>
       <PaperStream articles={articles} />
