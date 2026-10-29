@@ -50,14 +50,14 @@ export function Home() {
         }
         inert={phase === "journal"}
       >
-        <p className="animate-fade-rise-delay mt-8 max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+        <p className="animate-fade-rise-delay mt-8 max-w-2xl text-summary leading-relaxed text-on-video sm:text-body">
           We're designing tools for deep thinkers, bold creators, and quiet rebels. Amid the chaos, we
           build digital spaces for sharp focus and inspired work.
         </p>
         <button
           type="button"
           onClick={() => setPhase("journal")}
-          className="liquid-glass animate-fade-rise-delay-2 mt-12 rounded-full px-14 py-5 text-base text-foreground"
+          className="liquid-glass animate-fade-rise-delay-2 mt-12 rounded-full px-14 py-5 text-summary text-on-video"
         >
           Begin Journey
         </button>

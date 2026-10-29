@@ -306,12 +306,6 @@
   pointer-events: none;
 }
 
-.hero-copy,
-.hero-copy p,
-.hero-copy button {
-  color: var(--color-on-video);
-}
-
 .paper-stream {
   position: absolute;
   inset: 0;
