@@ -1,9 +1,17 @@
 import type { ReactNode } from "react";
 
-export function Column({ children, className = "" }: { children: ReactNode; className?: string }) {
+export function Column({
+  children,
+  className = "",
+  wide = false,
+}: {
+  children: ReactNode;
+  className?: string;
+  wide?: boolean;
+}) {
   return (
     <div className={`px-5 sm:px-6 ${className}`.trim()}>
-      <div className="mx-auto h-full max-w-measure">{children}</div>
+      <div className={`mx-auto h-full ${wide ? "max-w-wide" : "max-w-measure"}`}>{children}</div>
     </div>
   );
 }

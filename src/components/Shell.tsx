@@ -22,7 +22,7 @@ export function Shell({ children }: { children: ReactNode }) {
       <main id="main" tabIndex={-1} className="flex flex-1 flex-col outline-none">
         {children}
       </main>
-      {pathname !== "/" && <SiteFooter />}
+      <SiteFooter />
     </div>
   );
 }
