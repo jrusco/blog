@@ -11,7 +11,7 @@ export function Column({
 }) {
   return (
     <div className={`px-5 sm:px-6 ${className}`.trim()}>
-      <div className={`mx-auto h-full ${wide ? "max-w-wide" : "max-w-measure"}`}>{children}</div>
+      <div className={`mx-auto h-full min-w-0 ${wide ? "max-w-wide" : "max-w-measure"}`}>{children}</div>
     </div>
   );
 }
