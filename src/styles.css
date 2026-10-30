@@ -312,6 +312,391 @@
   animation: none;
 }
 
-.article-body p + p {
-  margin-top: 1.1rem;
+.dek {
+  font-family: var(--font-serif);
+  font-size: var(--text-h3);
+  font-style: normal;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--c-muted);
+}
+
+.article-title {
+  overflow-wrap: anywhere;
+}
+
+@layer components {
+  .article-body {
+    --flow: 1em;
+    min-width: 0;
+    font-synthesis: none;
+    color: var(--c-ink);
+  }
+
+  .article-body * + :is(p, ul, ol, blockquote) {
+    margin-top: var(--flow);
+  }
+
+  .article-body :is(h2, h3) + * {
+    margin-top: 0;
+  }
+
+  .article-body figure {
+    margin-inline: 0;
+    min-width: 0;
+  }
+
+  .article-body :is(pre, figure) {
+    margin-block: 2em;
+  }
+
+  .article-body figure pre {
+    margin-block: 0;
+  }
+
+  .article-body h2 {
+    margin-top: 3rem;
+    margin-bottom: 0.75rem;
+    font-size: var(--text-h2);
+    font-weight: 600;
+    line-height: 1.25;
+  }
+
+  .article-body h3 {
+    margin-top: 2.25rem;
+    margin-bottom: 0.5rem;
+    font-size: var(--text-h3);
+    font-weight: 600;
+    line-height: 1.3;
+  }
+
+  .article-body :is(ul, ol) {
+    padding-left: 1.5rem;
+  }
+
+  .article-body li + li {
+    margin-top: 0.5rem;
+  }
+
+  .article-body li :is(ul, ol) {
+    margin-top: 0.5rem;
+  }
+
+  .article-body ::marker {
+    color: var(--c-muted);
+  }
+
+  .article-body ol ::marker {
+    font-variant-numeric: tabular-nums;
+  }
+
+  .article-body blockquote {
+    border-left: 2px solid var(--c-accent);
+    padding-left: 1.25rem;
+    color: var(--c-ink);
+    font-style: normal;
+  }
+
+  .article-body a {
+    color: var(--c-ink);
+    text-decoration: underline 2px var(--c-accent);
+    text-underline-offset: 0.2em;
+    text-decoration-skip-ink: auto;
+  }
+
+  .article-body a:hover {
+    color: var(--c-accent);
+    text-decoration-thickness: 2px;
+    text-decoration-color: var(--c-accent);
+  }
+
+  .article-body strong {
+    font-weight: 600;
+  }
+
+  .article-body em {
+    font-style: italic;
+    font-weight: 400;
+  }
+
+  .article-body :not(pre) > code {
+    padding: 0.1em 0.3em;
+    border-radius: var(--radius-sm);
+    background: var(--c-surface);
+    color: var(--c-ink);
+    font-family: var(--font-mono);
+    font-size: 0.85em;
+    overflow-wrap: anywhere;
+  }
+
+  .article-body a code {
+    color: inherit;
+    text-decoration: inherit;
+  }
+
+  .article-body hr,
+  .article-body section[data-footnotes]::before {
+    width: 4rem;
+    margin-inline: auto;
+    border: 0;
+    border-top: 1px solid var(--c-hairline);
+  }
+
+  .article-body hr {
+    margin-block: 3rem;
+  }
+
+  .article-body .code-bar,
+  .article-body figure.code pre {
+    border: 1px solid var(--c-hairline);
+    background: var(--c-surface);
+  }
+
+  .article-body .code-bar {
+    border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  }
+
+  .article-body .code-bar button {
+    border: 0;
+    background: transparent;
+    transition: color var(--dur-base) var(--motion-ease);
+  }
+
+  .article-body figure.code {
+    min-width: 0;
+  }
+
+  .article-body figure.code pre {
+    min-width: 0;
+    max-width: 100%;
+    margin: 0;
+    border-top: 0;
+    border-radius: 0 0 var(--radius-sm) var(--radius-sm);
+    padding: 1rem 1.25rem;
+    color: var(--c-ink);
+    font-family: var(--font-mono);
+    font-size: var(--text-code);
+    font-weight: 400;
+    font-style: normal;
+    line-height: 1.6;
+    tab-size: 2;
+    white-space: pre;
+    overflow-wrap: normal;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+  }
+
+  .article-body figure.code pre code {
+    padding: 0;
+    border-radius: 0;
+    background: transparent;
+    color: inherit;
+    font: inherit;
+    white-space: inherit;
+  }
+
+  .article-body pre code.hljs {
+    color: var(--c-ink);
+    background: transparent;
+    font-style: normal;
+  }
+
+  .article-body :is(.hljs-keyword, .hljs-selector-tag, .hljs-meta, .hljs-doctag) {
+    color: var(--c-code-keyword);
+  }
+
+  .article-body :is(.hljs-string, .hljs-regexp, .hljs-addition) {
+    color: var(--c-code-string);
+  }
+
+  .article-body :is(.hljs-title, .hljs-function_, .hljs-class_, .hljs-built_in, .hljs-name, .hljs-attr) {
+    color: var(--c-code-function);
+  }
+
+  .article-body :is(.hljs-number, .hljs-literal, .hljs-symbol, .hljs-deletion) {
+    color: var(--c-code-number);
+  }
+
+  .article-body :is(.hljs-comment, .hljs-quote) {
+    color: var(--c-code-comment);
+    font-style: normal;
+  }
+
+  .article-body :is(.hljs-variable, .hljs-params, .hljs-operator, .hljs-punctuation) {
+    color: var(--c-ink);
+  }
+
+  .article-body figure.media > img,
+  .article-body .video-frame {
+    display: block;
+    width: 100%;
+    border: 1px solid var(--c-hairline);
+    border-radius: var(--radius-sm);
+    background: var(--c-surface);
+  }
+
+  .article-body figure.media > img {
+    height: auto;
+  }
+
+  .article-body figcaption {
+    max-width: var(--container-measure);
+    margin-top: 0.75rem;
+    margin-inline: auto;
+    color: var(--c-muted);
+    font-family: var(--font-serif);
+    font-size: var(--text-small);
+    line-height: 1.5;
+  }
+
+  .article-body .table-scroll {
+    min-width: 0;
+    max-width: 100%;
+    margin-top: var(--flow);
+    overflow-x: auto;
+  }
+
+  .article-body table {
+    width: max-content;
+    min-width: 100%;
+    border-collapse: collapse;
+    font-size: var(--text-small);
+    line-height: 1.5;
+  }
+
+  .article-body :is(th, td) {
+    padding: 0.35rem 0.75rem 0.35rem 0;
+    border-bottom: 1px solid var(--c-hairline);
+    text-align: left;
+    vertical-align: top;
+  }
+
+  .article-body th {
+    font-weight: 600;
+  }
+
+  .article-body sup {
+    line-height: 0;
+  }
+
+  .article-body a[data-footnote-ref] {
+    padding-inline: 0.15em;
+    color: var(--c-accent);
+    font-family: var(--font-mono);
+    font-size: 0.7em;
+    text-decoration: none;
+  }
+
+  .article-body a[data-footnote-ref]:hover {
+    text-decoration: underline;
+    text-decoration-thickness: 2px;
+    text-decoration-color: var(--c-accent);
+  }
+
+  .article-body section[data-footnotes] {
+    margin-top: 4rem;
+  }
+
+  .article-body section[data-footnotes]::before {
+    content: "";
+    display: block;
+    margin-block: 0 1.5rem;
+  }
+
+  .article-body .footnotes-label {
+    margin: 0 0 1rem;
+    color: var(--c-muted);
+    font-family: var(--font-mono);
+    font-size: var(--text-meta);
+    font-weight: 400;
+    line-height: 1.4;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+  }
+
+  .article-body section[data-footnotes] ol {
+    color: var(--c-muted);
+    font-size: var(--text-small);
+    line-height: 1.5;
+  }
+
+  .article-body section[data-footnotes] ::marker {
+    color: var(--c-muted);
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .article-body a[data-footnote-backref] {
+    margin-left: 0.25em;
+    color: var(--c-accent);
+    font-family: var(--font-mono);
+    text-decoration: none;
+  }
+
+  .article-body [id^="user-content-fn"] {
+    scroll-margin-top: 1.5rem;
+  }
+
+  .article-body section[data-footnotes] li:target {
+    color: var(--c-ink);
+  }
+
+  .video-scrim {
+    position: absolute;
+    inset: 0;
+    background: color-mix(in srgb, var(--c-page) 28%, transparent);
+    transition: background-color var(--dur-base) var(--motion-ease);
+    pointer-events: none;
+  }
+
+  .group:hover .video-scrim {
+    background: color-mix(in srgb, var(--c-page) 12%, transparent);
+  }
+
+  .video-play {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    display: flex;
+    width: 4rem;
+    height: 4rem;
+    align-items: center;
+    justify-content: center;
+    transform: translate(-50%, -50%);
+    border-radius: 999px;
+    background: var(--c-accent);
+    outline: 1px solid var(--c-page);
+    pointer-events: none;
+  }
+
+  .video-play svg {
+    display: block;
+    fill: var(--c-page);
+  }
+}
+
+@media (width >= 64rem) {
+  .article-body figure.code,
+  .article-body figure.media {
+    margin-inline: -5.5rem;
+  }
+}
+
+@media (width < 40rem) {
+  .article-body figure.code,
+  .article-body figure.media {
+    margin-inline: -1.25rem;
+  }
+
+  .article-body .code-bar,
+  .article-body figure.code pre,
+  .article-body figure.media > img,
+  .article-body .video-frame {
+    border-inline-width: 0;
+    border-radius: 0;
+  }
+
+  .article-body figcaption {
+    padding-inline: 1.25rem;
+  }
 }

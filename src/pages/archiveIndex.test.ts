@@ -3,7 +3,7 @@ import type { Article } from "../lib/articles";
 import { ArchiveIndex } from "./archiveIndex";
 
 function post(fields: Pick<Article, "slug" | "title" | "date" | "summary">): Article {
-  return { ...fields, body: "" };
+  return { ...fields, body: "", draft: false };
 }
 
 describe("ArchiveIndex", () => {
@@ -45,7 +45,7 @@ describe("ArchiveIndex", () => {
   });
 
   it("lists the live journal newest first under 2026", () => {
-    const years = ArchiveIndex.byYear();
+    const years = ArchiveIndex.byYear(ArchiveIndex.posts().filter((entry) => !entry.draft));
     expect(years.map((group) => group.year)).toEqual(["2026"]);
     expect(years[0]?.posts.map((entry) => entry.date)).toEqual([
       "2026-10-20",

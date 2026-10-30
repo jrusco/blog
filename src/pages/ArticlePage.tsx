@@ -1,37 +1,40 @@
 import { useLayoutEffect } from "react";
 import { Link, useParams } from "react-router-dom";
-import ReactMarkdown from "react-markdown";
 import { Column } from "../components/Column";
+import { ArticleMarkdown } from "../components/MarkdownBody";
 import { formatDate, getArticle } from "../lib/articles";
+import { NotFound } from "./NotFound";
 
 export function ArticlePage() {
   const { slug } = useParams();
   const article = slug ? getArticle(slug) : undefined;
 
+  const title = article?.title;
   useLayoutEffect(() => {
-    document.title = article ? `${article.title} · Criterio` : "Not found · Criterio";
-  }, [article?.title]);
+    if (title) document.title = `${title} · Criterio`;
+  }, [title]);
+
+  if (!article) return <NotFound kind="article" />;
 
   return (
     <Column>
-      <article className="w-full pb-24 pt-8">
-        <Link to="/" className="inline-flex items-center min-h-11 text-meta text-muted hover:text-ink">
+      <div className="pt-8">
+        <Link to="/" className="inline-flex min-h-11 items-center text-meta text-muted hover:text-ink">
           ← Criterio
         </Link>
-        {article ? (
-          <>
-            <p className="mt-10 text-meta text-muted">{formatDate(article.date)}</p>
-            <h1 className="mt-3 text-title">{article.title}</h1>
-            <div className="article-body mt-8 text-body text-ink">
-              <ReactMarkdown>{article.body}</ReactMarkdown>
-            </div>
-          </>
-        ) : (
-          <>
-            <h1 className="mt-10 text-title">This page blew past.</h1>
-            <p className="mt-4 text-body text-muted">No article matches that name.</p>
-          </>
-        )}
+      </div>
+      <article className="w-full min-w-0">
+        <header className="mt-10">
+          {article.draft ? <p className="mb-3 font-mono text-meta text-accent">TEST FIXTURE · NOT PUBLISHED</p> : null}
+          <time dateTime={article.date} className="font-mono text-meta uppercase text-muted">
+            {formatDate(article.date)}
+          </time>
+          <h1 className="article-title mt-3 text-title">{article.title}</h1>
+          {article.summary ? <p className="dek mt-4">{article.summary}</p> : null}
+        </header>
+        <div className="article-body mt-10 text-body text-ink sm:mt-12">
+          <ArticleMarkdown body={article.body} />
+        </div>
       </article>
     </Column>
   );

@@ -6,7 +6,7 @@ import { ArchiveList } from "./ArchivePage";
 import { ArchiveIndex } from "./archiveIndex";
 
 function post(fields: Pick<Article, "slug" | "title" | "date" | "summary">): Article {
-  return { ...fields, body: "" };
+  return { ...fields, body: "", draft: false };
 }
 
 function render(posts: readonly Article[]) {
