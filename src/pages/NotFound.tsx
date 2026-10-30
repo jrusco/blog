@@ -8,7 +8,7 @@ export function NotFound({ kind }: { kind: "article" | "route" }) {
   }, []);
 
   return (
-    <Column>
+    <Column className="min-h-dvh">
       <div className="pt-8">
         <Link to="/" className="inline-flex min-h-11 items-center text-meta text-muted hover:text-ink">
           ← Criterio
