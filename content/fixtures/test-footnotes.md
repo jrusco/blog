@@ -9,6 +9,14 @@ Test fixture: placeholder content, not a post.
 
 A paragraph with an explanatory note.[^explain]
 
+Placeholder lines keep the notes below the first screen, so a reference and its return are a real scroll.
+
+The next line is only filler. It names no one and cites nothing. It exists so the column has somewhere to travel.
+
+Another filler line follows, still placeholder, still a fixture, still not a post.
+
+One more filler line sits here so the notes begin well under the fold on a laptop screen.
+
 - A list item that carries a note[^source]
 - Another item with no note
 
