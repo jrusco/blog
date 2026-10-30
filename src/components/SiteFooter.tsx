@@ -10,7 +10,7 @@ export function SiteFooter() {
     <footer className={onHome ? "absolute inset-x-0 bottom-0 z-30" : "mt-24 border-t border-hairline"}>
       <Column className="py-6">
         <p className={`font-mono text-meta flex flex-wrap items-center gap-x-2 sm:flex-nowrap sm:whitespace-nowrap ${tone}`}>
-          Criterio is a public notebook on taste and judgment.
+          <span className="max-sm:basis-full">Criterio is a public notebook on taste and judgment.</span>
           <span className="inline-flex items-baseline gap-x-2 whitespace-nowrap">
             <span aria-hidden="true" className="max-sm:hidden">·</span>
             <a className={`${tone} hover:text-ink inline-flex items-center min-h-11 px-1 -mx-1`} href={LINKS.x}>

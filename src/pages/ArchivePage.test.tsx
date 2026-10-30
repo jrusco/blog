@@ -43,6 +43,8 @@ describe("ArchiveList", () => {
     expect(html).toContain("Notes from the hours after the inbox gives up.");
     expect(html).toContain("sm:grid-cols-[7rem_minmax(0,1fr)]");
     expect(html).toContain("sm:items-baseline");
+    expect(html).toContain("inline-block");
+    expect(html).toContain("py-1");
     expect(html).toContain("no-underline");
     expect(html).toContain("decoration-accent");
     expect(html).toContain("underline-offset-[0.2em]");

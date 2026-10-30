@@ -101,7 +101,7 @@ function FlyingSheet({
 export function PaperStream({ articles }: { articles: Article[] }) {
   const reduced = useMedia("(prefers-reduced-motion: reduce)");
   const narrow = useMedia("(max-width: 760px)");
-  const streamRef = useRef<HTMLDivElement>(null);
+  const streamRef = useRef<HTMLElement>(null);
   useTabOnlyVisibleSheets(streamRef);
 
   if (articles.length === 0) {
@@ -117,20 +117,20 @@ export function PaperStream({ articles }: { articles: Article[] }) {
 
   if (reduced) {
     return (
-      <div className="paper-stream paper-stream-still">
+      <section className="paper-stream paper-stream-still" aria-label="Essays">
         {articles.map((article) => (
           <Link key={article.slug} to={`/journal/${article.slug}`} className="paper-sheet paper-sheet-still">
             <SheetFace article={article} />
           </Link>
         ))}
-      </div>
+      </section>
     );
   }
 
   const { slots, duration, gap, scale } = streamLayout(articles.length, narrow);
 
   return (
-    <div ref={streamRef} className="paper-stream" aria-label="Essays">
+    <section ref={streamRef} className="paper-stream" aria-label="Essays">
       {Array.from({ length: slots }, (_, slot) => (
         <FlyingSheet
           key={slot}
@@ -143,6 +143,6 @@ export function PaperStream({ articles }: { articles: Article[] }) {
           narrow={narrow}
         />
       ))}
-    </div>
+    </section>
   );
 }
