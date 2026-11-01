@@ -30,6 +30,7 @@ jobs:
       - run: npm run build -- --base="/${REPO_NAME}/"
         env:
           REPO_NAME: ${{ github.event.repository.name }}
+      - run: grep -q 'http-equiv="Content-Security-Policy"' dist/index.html
       # Pages has no rewrites. It serves 404.html for unknown paths, so deep links like /journal/slug still boot the app.
       - run: cp dist/index.html dist/404.html
       - if: github.event_name != 'pull_request'
