@@ -1,5 +1,6 @@
 import tailwindcss from "@tailwindcss/vite";
 import react from "@vitejs/plugin-react";
+import { createHash } from "node:crypto";
 import { mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { imageSize } from "image-size";
@@ -111,6 +112,43 @@ function pagesHtml(): Plugin {
   };
 }
 
+// Build-only: the dev server injects inline scripts (React Refresh) and <style> tags, which this policy would block.
+function metaCsp(): Plugin {
+  return {
+    name: "meta-csp",
+    apply: "build",
+    transformIndexHtml: {
+      order: "post",
+      handler(html) {
+        const styleHashes = [...html.matchAll(/<style>([\s\S]*?)<\/style>/g)].map(
+          ([, css]) => `'sha256-${createHash("sha256").update(css).digest("base64")}'`,
+        );
+        const policy = [
+          "default-src 'none'",
+          "script-src 'self'",
+          `style-src 'self' ${styleHashes.join(" ")}`.trim(),
+          "font-src 'self'",
+          "img-src 'self'",
+          "media-src 'self'",
+          "connect-src 'self'",
+          "manifest-src 'self'",
+          "base-uri 'self'",
+          "form-action 'none'",
+          "object-src 'none'",
+          "frame-src 'none'",
+          "worker-src 'none'",
+          "upgrade-insecure-requests",
+        ].join("; ");
+        // First in <head>: a meta CSP only governs content parsed after it.
+        return html.replace(
+          /<head>/,
+          `<head>\n    <meta http-equiv="Content-Security-Policy" content="${policy}" />`,
+        );
+      },
+    },
+  };
+}
+
 export default defineConfig({
   base: "/blog/",
   resolve: {
@@ -120,5 +158,5 @@ export default defineConfig({
       "style-to-js": styleToJsStub,
     },
   },
-  plugins: [slimMarkdown(), imageDimensions(), dropUnreferencedImages(), react(), tailwindcss(), pagesHtml()],
+  plugins: [slimMarkdown(), imageDimensions(), dropUnreferencedImages(), react(), tailwindcss(), pagesHtml(), metaCsp()],
 });
