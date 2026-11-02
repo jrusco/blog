@@ -5,6 +5,7 @@ import { mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { imageSize } from "image-size";
 import { defineConfig, type Plugin } from "vite";
+import { RssFeed } from "./src/lib/rss.ts";
 
 // remark-gfm also pulls a markdown serializer, the SVG attribute map, and style
 // parsing. None of that runs while rendering a post, and keeping it put the
@@ -112,6 +113,23 @@ function pagesHtml(): Plugin {
   };
 }
 
+function rssFeed(): Plugin {
+  return {
+    name: "rss-feed",
+    apply: "build",
+    generateBundle() {
+      const dir = resolve("content/articles");
+      const entries = readdirSync(dir)
+        .filter((name) => name.endsWith(".md"))
+        .map((name) => ({
+          path: `content/articles/${name}`,
+          raw: readFileSync(resolve(dir, name), "utf8"),
+        }));
+      this.emitFile({ type: "asset", fileName: "rss.xml", source: RssFeed.build(entries) });
+    },
+  };
+}
+
 // Build-only: the dev server injects inline scripts (React Refresh) and <style> tags, which this policy would block.
 function metaCsp(): Plugin {
   return {
@@ -158,5 +176,5 @@ export default defineConfig({
       "style-to-js": styleToJsStub,
     },
   },
-  plugins: [slimMarkdown(), imageDimensions(), dropUnreferencedImages(), react(), tailwindcss(), pagesHtml(), metaCsp()],
+  plugins: [slimMarkdown(), imageDimensions(), dropUnreferencedImages(), react(), tailwindcss(), pagesHtml(), rssFeed(), metaCsp()],
 });
