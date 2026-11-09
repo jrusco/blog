@@ -38,11 +38,11 @@ export function ArchiveList({ posts }: { posts: readonly Article[] }) {
             <div className="min-w-0">
               <Link
                 to={`/journal/${post.slug}`}
-                className="inline-block py-1 font-serif text-list-title font-semibold text-ink no-underline decoration-accent underline-offset-[0.2em] [&:hover]:underline focus-visible:underline"
+                className="inline-block py-1 font-serif text-list-title text-ink no-underline decoration-accent underline-offset-[0.2em] [&:hover]:underline focus-visible:underline"
               >
                 {post.title}
               </Link>
-              <p className="mt-2 font-serif text-summary font-normal text-muted">{post.summary}</p>
+              <p className="mt-2 font-serif text-summary text-muted">{post.summary}</p>
             </div>
           </li>
         ))}
