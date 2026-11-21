@@ -13,6 +13,14 @@ npm install
 npm run dev
 ```
 
+## Changing fonts
+
+Family names, the two weight tokens, and the fallback faces live in `src/styles/fonts.css`. The font files live in `public/fonts`. The build fails when a family name from that CSS file appears in any other file.
+
+1. Add the Latin subset `.woff2` and its `OFL.txt` under `public/fonts`.
+2. In `src/styles/fonts.css`, point the serif `@font-face` at that file, set the family name, set `--font-serif-weight-title` and `--font-serif-weight-body`, and retune `size-adjust`, `ascent-override`, and `descent-override`.
+3. Run `npm test`, then `npm run build`. The preload link comes from the first `@font-face` that points at a file.
+
 ## Publish an article
 
 Every change reaches the site through a pull request. Merging to `main` redeploys the site.

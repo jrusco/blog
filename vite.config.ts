@@ -5,6 +5,7 @@ import { mkdirSync, readFileSync, readdirSync, writeFileSync } from "node:fs";
 import { resolve } from "node:path";
 import { imageSize } from "image-size";
 import { defineConfig, type Plugin } from "vite";
+import { Fonts } from "./src/lib/fonts.ts";
 import { RssFeed } from "./src/lib/rss.ts";
 
 // remark-gfm also pulls a markdown serializer, the SVG attribute map, and style
@@ -176,5 +177,5 @@ export default defineConfig({
       "style-to-js": styleToJsStub,
     },
   },
-  plugins: [slimMarkdown(), imageDimensions(), dropUnreferencedImages(), react(), tailwindcss(), pagesHtml(), rssFeed(), metaCsp()],
+  plugins: [Fonts.plugin(), slimMarkdown(), imageDimensions(), dropUnreferencedImages(), react(), tailwindcss(), pagesHtml(), rssFeed(), metaCsp()],
 });
